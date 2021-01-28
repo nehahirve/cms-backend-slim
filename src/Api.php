@@ -10,27 +10,23 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 
-class Api
-{
+class Api {
     private App $app;
 
     /**
      * Api constructor.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->app = AppFactory::create();
 
         $this->setup($this->app);
     }
 
-    public function run()
-    {
+    public function run() {
         $this->app->run();
     }
 
-    function getDatabaseSettings(): DatabaseSettings
-    {
+    function getDatabaseSettings(): DatabaseSettings {
         $settings = new DatabaseSettings();
         $settings->username = getenv('MYSQL_USERNAME');
         $settings->password = getenv('MYSQL_PASSWORD');
@@ -48,18 +44,23 @@ class Api
         return $settings;
     }
 
-    private function setup(App $app): App
-    {
+    private function setup(App $app): App {
         $pdo = (new PdoFactory($this->getDatabaseSettings()))->createPdo();
-        $counterApi = new CounterApi(new CounterService($pdo));
+
+        $postsApi = new Posts\PostApi(new Posts\PostService($pdo));
+        $pagesApi = new Pages\PageApi(new Pages\PageService($pdo));
 
         $app->options('/{routes:.*}', function (Request $request, Response $response) {
             // CORS Pre-Flight OPTIONS Request Handler
             return $response;
         });
 
-        $app->group('/api/counters', function (Group $group) use ($counterApi) {
-            $counterApi->setup($group);
+        $app->group('/api/posts', function (Group $group) use ($postsApi) {
+            $postsApi->setup($group);
+        });
+
+        $app->group('/api/pages', function (Group $group) use ($pagesApi) {
+            $pagesApi->setup($group);
         });
 
         return $app;

@@ -6,20 +6,17 @@ namespace App;
 
 use PDO;
 
-class PdoFactory
-{
+class PdoFactory {
     /**
      * @var DatabaseSettings
      */
     private DatabaseSettings $settings;
 
-    public function __construct(DatabaseSettings $settings)
-    {
+    public function __construct(DatabaseSettings $settings) {
         $this->settings = $settings;
     }
 
-    public function createPdo(): PDO
-    {
+    public function createPdo(): PDO {
         $settings = $this->settings;
 
         $options = array(
