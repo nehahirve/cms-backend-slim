@@ -7,4 +7,4 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 
 (new Api())->run();
-echo 'hello there';
+echo 'hello again';
