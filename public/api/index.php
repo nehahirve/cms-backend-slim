@@ -5,4 +5,5 @@ use App\Api;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
+echo 'hello';
 (new Api())->run();
