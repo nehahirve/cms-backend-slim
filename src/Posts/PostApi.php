@@ -29,7 +29,8 @@ class PostApi
     {
         $group->get('', function (Request $request, Response $response, $args)  {
             $response->getBody()->write(json_encode($this->postService->getPosts()));
-            return $response->withHeader('Content-Type', 'application/json');
+            return $response->withHeader('Content-Type', 'application/json')
+            ->withHeader('Access-Control-Allow-Origin', '*');
         });
 
         $group->post('', function (Request $request, Response $response, $args) {
@@ -37,22 +38,22 @@ class PostApi
             $title =  $input->title;
             $body = $input->body;
             $response->getBody()->write(json_encode($this->postService->createPost($title,$body)));
-            return $response->withHeader('Content-Type', 'application/json');
+            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
         });
         $group->get('/{id}', function (Request $request, Response $response, $args) {
             $response->getBody()->write(json_encode($this->postService->getPost((int)$args['id']+0)));
-            return $response->withHeader('Content-Type', 'application/json');
+            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
         });
         $group->put('/{id}', function (Request $request, Response $response, $args) {
             $input = json_decode(file_get_contents('php://input'));
             $title =  $input->title;
             $body = $input->body;
             $response->getBody()->write(json_encode($this->postService->editPost((int)$args['id']+0, $title, $body)));
-            return $response->withHeader('Content-Type', 'application/json');
+            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
         });
         $group->delete('/{id}', function (Request $request, Response $response, $args) {
             $response->getBody()->write(json_encode($this->postService->deletePost((int)$args['id'])));
-            return $response->withHeader('Content-Type', 'application/json');
+            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
         });
     }
 }

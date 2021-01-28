@@ -36,11 +36,14 @@ class PageService
         $statement = $this->prepare($query);
         $statement->execute();
 
-        $posts = array();
+        $array = array();
+        $array['pages'] = array();
+
         while ($entry = $statement->fetchObject(PageModel::class)) {
-            $posts[] = $entry;
+            array_push($array['pages'], $entry);
+
         }
-        return $posts;
+        return $array;
     }
 
     public function editPost(int $id, string $title, string $body): ?PageModel

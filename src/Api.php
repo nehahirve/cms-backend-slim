@@ -55,6 +55,8 @@ class Api {
             return $response;
         });
 
+
+
         $app->group('/api/posts', function (Group $group) use ($postsApi) {
             $postsApi->setup($group);
         });

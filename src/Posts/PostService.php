@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Posts;
 
 
+use App\Pages\PageModel;
 use PDO;
 use PDOStatement;
 
@@ -36,11 +37,14 @@ class PostService
         $statement = $this->prepare($query);
         $statement->execute();
 
-        $posts = array();
+        $array = array();
+        $array['posts'] = array();
+
         while ($entry = $statement->fetchObject(PostModel::class)) {
-            $posts[] = $entry;
+            array_push($array['posts'], $entry);
+
         }
-        return $posts;
+        return $array;
     }
 
     public function editPost(int $id, string $title, string $body): ?PostModel
