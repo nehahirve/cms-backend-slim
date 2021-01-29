@@ -36,6 +36,10 @@ class Api {
         $settings->sslKey = getenv('MYSQL_SSL_KEY');
         $settings->sslCert = getenv('MYSQL_SSL_CERT');
 
+        $settings->sslCa = $this->storeInTemporaryFile($settings->sslCa);
+        $settings->sslKey = $this->storeInTemporaryFile($settings->sslKey);
+        $settings->sslCert = $this->storeInTemporaryFile($settings->sslCert);
+
 //        if (!file_exists($settings->sslCa) || !file_exists($settings->sslKey) || !file_exists($settings->sslCert)) {
 //            error_log("Missing MySQL SSL files");
 //            die();
@@ -66,5 +70,16 @@ class Api {
         });
 
         return $app;
+    }
+
+    private function storeInTemporaryFile(string $pathOrData)
+    {
+        if (file_exists($pathOrData)) {
+            return $pathOrData;
+        } else {
+            $filePath = tempnam(sys_get_temp_dir(), 'mysql');
+            file_put_contents($filePath, $pathOrData);
+            return $filePath;
+        }
     }
 }
