@@ -8,8 +8,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
-class PostApi
-{
+class PostApi {
     /**
      * @var PostService
      */
@@ -20,40 +19,42 @@ class PostApi
      * PostApi constructor.
      * @param PostService $postService
      */
-    public function __construct(PostService $postService)
-    {
+    public function __construct(PostService $postService) {
         $this->postService = $postService;
     }
 
-    public function setup(Group $group)
-    {
-        $group->get('', function (Request $request, Response $response, $args)  {
+    public function setup(Group $group) {
+        $group->get('', function (Request $request, Response $response, $args) {
             $response->getBody()->write(json_encode($this->postService->getPosts()));
             return $response->withHeader('Content-Type', 'application/json')
-            ->withHeader('Access-Control-Allow-Origin', '*');
+                ->withHeader('Access-Control-Allow-Origin', '*');
         });
 
         $group->post('', function (Request $request, Response $response, $args) {
             $input = json_decode(file_get_contents('php://input'));
-            $title =  $input->title;
+            $title = $input->title;
             $body = $input->body;
-            $response->getBody()->write(json_encode($this->postService->createPost($title,$body)));
-            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
+            $response->getBody()->write(json_encode($this->postService->createPost($title, $body)));
+            return $response->withHeader('Content-Type', 'application/json')
+                ->withHeader('Access-Control-Allow-Origin', '*');
         });
         $group->get('/{id}', function (Request $request, Response $response, $args) {
-            $response->getBody()->write(json_encode($this->postService->getPost((int)$args['id']+0)));
-            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
+            $response->getBody()->write(json_encode($this->postService->getPost((int)$args['id'] + 0)));
+            return $response->withHeader('Content-Type', 'application/json')
+                ->withHeader('Access-Control-Allow-Origin', '*');
         });
         $group->put('/{id}', function (Request $request, Response $response, $args) {
             $input = json_decode(file_get_contents('php://input'));
-            $title =  $input->title;
+            $title = $input->title;
             $body = $input->body;
-            $response->getBody()->write(json_encode($this->postService->editPost((int)$args['id']+0, $title, $body)));
-            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
+            $response->getBody()->write(json_encode($this->postService->editPost((int)$args['id'] + 0, $title, $body)));
+            return $response->withHeader('Content-Type', 'application/json')
+                ->withHeader('Access-Control-Allow-Origin', '*');
         });
         $group->delete('/{id}', function (Request $request, Response $response, $args) {
             $response->getBody()->write(json_encode($this->postService->deletePost((int)$args['id'])));
-            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
+            return $response->withHeader('Content-Type', 'application/json')
+                ->withHeader('Access-Control-Allow-Origin', '*');
         });
     }
 }
