@@ -56,7 +56,9 @@ class Api {
 
         $app->options('/{routes:.*}', function (Request $request, Response $response) {
             // CORS Pre-Flight OPTIONS Request Handler
-            return $response;
+            return $response
+                ->withHeader('Access-Control-Allow-Origin', '*')
+                ->withHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
         });
 
 

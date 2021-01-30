@@ -27,7 +27,10 @@ class PostApi {
         $group->get('', function (Request $request, Response $response, $args) {
             $response->getBody()->write(json_encode($this->postService->getPosts()));
             return $response->withHeader('Content-Type', 'application/json')
-                ->withHeader('Access-Control-Allow-Origin', '*');
+                ->withHeader('Access-Control-Allow-Origin', '*')
+                ->withHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+
+
         });
 
         $group->post('', function (Request $request, Response $response, $args) {
