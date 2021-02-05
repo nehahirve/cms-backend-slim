@@ -58,6 +58,11 @@ class PageService
 
         $statement->execute();
 
+        $query2 = "UPDATE pages SET slug = LOWER(REPLACE(title, ' ', '-')) WHERE title=:title";
+        $statement = $this->prepare($query2);
+        $statement->bindParam(":title", $title);
+        $statement->execute();
+
         return $this->getPost($id + 0);
     }
 
@@ -67,6 +72,7 @@ class PageService
         $statement = $this->prepare($query);
         $statement->execute(compact('slug'));
         return $statement->fetchObject(PageModel::class) ?: null;
+
     }
 
     public function deletePost(int $id): ?PageModel {
