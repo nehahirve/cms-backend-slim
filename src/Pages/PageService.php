@@ -61,11 +61,11 @@ class PageService
         return $this->getPost($id + 0);
     }
 
-    public function getPost(int $id): ?PageModel
+    public function getPost(string $slug): ?PageModel
     {
-        $query = "select * from pages where id=:id";
+        $query = "select * from pages where slug=:slug";
         $statement = $this->prepare($query);
-        $statement->execute(compact('id'));
+        $statement->execute(compact('slug'));
         return $statement->fetchObject(PageModel::class) ?: null;
     }
 
@@ -89,6 +89,12 @@ class PageService
         $statement->execute();
 
         $id = (int)$this->pdo->lastInsertId();
+
+        $query2 = "UPDATE pages SET slug = LOWER(REPLACE(title, ' ', '-')) WHERE title=:title";
+        $statement = $this->prepare($query2);
+        $statement->bindParam(":title", $title);
+        $statement->execute();
+
         return $this->getPost($id);
     }
 
@@ -101,7 +107,8 @@ create table IF NOT EXISTS pages
         primary key,
     title      varchar(255)                       not null,
     body       text                               null,
-    created_at datetime default CURRENT_TIMESTAMP not null
+    created_at datetime default CURRENT_TIMESTAMP not null,
+    slug       varchar(128)                       not null
 );
 
 EOF;

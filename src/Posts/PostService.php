@@ -103,6 +103,7 @@ create table IF NOT EXISTS posts
 );
 
 
+
 EOF;
         $this->pdo->exec($ddl);
     }
