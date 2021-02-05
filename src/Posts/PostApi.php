@@ -33,8 +33,9 @@ class PostApi {
         $group->post('', function (Request $request, Response $response, $args) {
             $input = json_decode(file_get_contents('php://input'));
             $title = $input->title;
+            $url = $input->url;
             $body = $input->body;
-            $response->getBody()->write(json_encode($this->postService->createPost($title, $body)));
+            $response->getBody()->write(json_encode($this->postService->createPost($title, $body, $url)));
             return $response->withHeader('Content-Type', 'application/json')
                 ->withHeader('Access-Control-Allow-Origin', '*');
         });
@@ -46,8 +47,9 @@ class PostApi {
         $group->put('/{id}', function (Request $request, Response $response, $args) {
             $input = json_decode(file_get_contents('php://input'));
             $title = $input->title;
+            $url = $input->url;
             $body = $input->body;
-            $response->getBody()->write(json_encode($this->postService->editPost((int)$args['id'] + 0, $title, $body)));
+            $response->getBody()->write(json_encode($this->postService->editPost((int)$args['id'] + 0, $title, $body, $url)));
             return $response->withHeader('Content-Type', 'application/json')
                 ->withHeader('Access-Control-Allow-Origin', '*');
         });

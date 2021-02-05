@@ -9,4 +9,5 @@ class PostModel {
     public string $title;
     public ?string $body;
     public string $created_at;
+    public ?string $url;
 }

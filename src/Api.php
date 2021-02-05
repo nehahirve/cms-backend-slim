@@ -61,8 +61,6 @@ class Api {
                 ->withHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
         });
 
-
-
         $app->group('/api/posts', function (Group $group) use ($postsApi) {
             $postsApi->setup($group);
         });
