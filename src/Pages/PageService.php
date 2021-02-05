@@ -62,8 +62,14 @@ class PageService
         $statement = $this->prepare($query2);
         $statement->bindParam(":title", $title);
         $statement->execute();
+        return $this->getPostById((int)$id);
+    }
 
-        return $this->getPost($id + 0);
+    private function getPostById(int $id): ?PageModel {
+        $query = "select * from pages where id=:id";
+        $statement = $this->prepare($query);
+        $statement->execute(compact('id'));
+        return $statement->fetchObject(PageModel::class) ?: null;
     }
 
     public function getPost(string $slug): ?PageModel
