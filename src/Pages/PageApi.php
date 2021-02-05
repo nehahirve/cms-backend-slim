@@ -29,7 +29,8 @@ class PageApi
     {
         $group->get('', function (Request $request, Response $response, $args)  {
             $response->getBody()->write(json_encode($this->pageService->getPosts()));
-            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
+            return $response->withHeader('Content-Type', 'application/json')
+                ->withHeader('Access-Control-Allow-Origin', '*');
         });
 
         $group->post('', function (Request $request, Response $response, $args) {
@@ -41,16 +42,18 @@ class PageApi
         });
         $group->get('/{slug}', function (Request $request, Response $response, $args) {
             $response->getBody()->write(json_encode($this->pageService->getPost($args['slug'])));
-            return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withHeader('Access-Control-Allow-Origin', '*');
         });
-        $group->put('/{slug}', function (Request $request, Response $response, $args) {
+        $group->put('/{id}', function (Request $request, Response $response, $args) {
             $input = json_decode(file_get_contents('php://input'));
             $title =  $input->title;
             $body = $input->body;
             $response->getBody()->write(json_encode($this->pageService->editPost((int)$args['id']+0, $title, $body)));
             return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
         });
-        $group->delete('/{slug}', function (Request $request, Response $response, $args) {
+        $group->delete('/{id}', function (Request $request, Response $response, $args) {
             $response->getBody()->write(json_encode($this->pageService->deletePost((int)$args['id'])));
             return $response->withHeader('Content-Type', 'application/json')->withHeader('Access-Control-Allow-Origin', '*');
         });
