@@ -58,7 +58,7 @@ class PageService
 
         $statement->execute();
 
-        $query2 = "UPDATE pages SET slug = LOWER(REPLACE(title, ' ', '-')) WHERE title=:title";
+        $query2 = "UPDATE pages SET slug = LOWER(REPLACE(REPLACE(title, ' ', '-'), '.', '')) WHERE title=:title";
         $statement = $this->prepare($query2);
         $statement->bindParam(":title", $title);
         $statement->execute();
